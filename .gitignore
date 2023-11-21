@@ -5,3 +5,5 @@ Temp/*
 
 .vsconfig
 *.sln
+
+.fake

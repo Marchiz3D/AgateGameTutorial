@@ -52,5 +52,5 @@
         "Temp/": true
     },
     "dotnet.preferCSharpExtension": true,
-    "dotnet.defaultSolution": "Agate Course.sln"
+    "dotnet.defaultSolution": "AgateGameTutorial.sln"
 }
