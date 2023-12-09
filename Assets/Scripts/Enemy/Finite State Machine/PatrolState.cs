@@ -8,6 +8,7 @@ public class PatrolState : BaseState
     private Vector3 destination;
     public void EnterState(Enemy enemy) {
         isMoving = false;
+        enemy.animator.SetTrigger("PatrolState");
     }
 
     public void UpdateState (Enemy enemy) {

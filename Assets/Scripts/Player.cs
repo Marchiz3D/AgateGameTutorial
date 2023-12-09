@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -11,6 +12,10 @@ public class Player : MonoBehaviour
     [SerializeField] private float moveSpeed;
     [SerializeField] private Camera cam;
     [SerializeField] private float powerUpDuration;
+    [SerializeField] private Transform respawnPoint;
+    [SerializeField] private TMP_Text healthText;
+    [SerializeField] private int health;
+    private bool isPowerUpActive;
 
     private Rigidbody rb;
     private Coroutine powerUpCoroutine;
@@ -26,18 +31,39 @@ public class Player : MonoBehaviour
     }
     private IEnumerator StartPowerUp()
     {
+        isPowerUpActive = true;
         if (OnPowerUpStart != null)
         {
             OnPowerUpStart();
         }
         yield return new WaitForSeconds(powerUpDuration);
+        isPowerUpActive = false;
         if (OnPowerUpStop != null)
         {
             OnPowerUpStop();
         }
     }
+
+    private void UpdateUI() {
+        healthText.text = "Health: " + health;
+    }
+
+    public void Dead() {
+        health -= 1;
+        if (health > 0)
+        {
+            transform.position = respawnPoint.position;
+        }
+        else
+        {
+            health = 0;
+            Debug.Log("Lose");
+        }
+        UpdateUI();
+    }
     private void Awake() 
     {
+        UpdateUI();
         rb = GetComponent<Rigidbody>();
         HideAndLockCursor();
     }
@@ -64,5 +90,14 @@ public class Player : MonoBehaviour
 
         // Player movement
         rb.velocity = moveDirection * moveSpeed * Time.deltaTime;
+    }
+    private void OnCollisionEnter(Collision other) {
+        if (isPowerUpActive)
+        {
+            if (other.gameObject.CompareTag("Enemy"))
+            {
+                other.gameObject.GetComponent<Enemy>().Dead();
+            }
+        }
     }
 }

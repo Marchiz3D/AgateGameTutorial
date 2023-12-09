@@ -5,6 +5,7 @@ using UnityEngine;
 public class PickableManager : MonoBehaviour
 {
     [SerializeField] private Player player;
+    [SerializeField] private ScoreManager scoreManager;
     private List<Pickable> pickableList = new List<Pickable>();
 
     // Start is called before the first frame update
@@ -22,11 +23,14 @@ public class PickableManager : MonoBehaviour
         {
             pickableList.Add(pickableObjects[i]);
             pickableList[i].OnPicked += OnPickablePicked;
+
+            scoreManager.SetMaxScore(pickableList.Count);
         }
     }
  
     public void OnPickablePicked(Pickable pickable){
         pickableList.Remove(pickable);
+        scoreManager.AddScore(1);
         if (pickable.picakbleType == PicakbleType.PowerUp)
         {
             player?.PickPowerUp();

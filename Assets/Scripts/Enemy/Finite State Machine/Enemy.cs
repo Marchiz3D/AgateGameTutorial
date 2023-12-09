@@ -13,8 +13,8 @@ public class Enemy : MonoBehaviour
   public PatrolState patrolState = new PatrolState();
   public ChaseState chaseState = new ChaseState();
   public RetreatState retreatState = new RetreatState();
-  [HideInInspector]public NavMeshAgent navMeshAgent;
-
+  [HideInInspector] public NavMeshAgent navMeshAgent;
+  [HideInInspector] public Animator animator;
 
   public void SwitchState(BaseState state) {
     currentState.ExitState(this);
@@ -30,7 +30,12 @@ public class Enemy : MonoBehaviour
   {
     SwitchState(patrolState);
   }
+
+  public void Dead() {
+    Destroy(gameObject);
+  }
   private void Awake() {
+    animator = GetComponent<Animator>();
     currentState = patrolState;
     currentState.EnterState(this);
     navMeshAgent = GetComponent<NavMeshAgent>();
@@ -45,6 +50,16 @@ public class Enemy : MonoBehaviour
   }
   private void Update() {
     currentState.UpdateState(this);
+  }
+
+  private void OnCollisionEnter(Collision other) {
+    if (currentState != retreatState)
+    {
+      if (other.gameObject.CompareTag("Player"))
+      {
+        other.gameObject.GetComponent<Player>().Dead();
+      }
+    }
   }
 
 
