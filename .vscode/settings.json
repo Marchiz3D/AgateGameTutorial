@@ -53,5 +53,5 @@
   },
   "dotnet.preferCSharpExtension": true,
   "dotnet.defaultSolution": "AgateGameTutorial.sln",
-  "editor.inlineSuggest.showToolbar": "onHover"
+  "editor.inlineSuggest.showToolbar": "always"
 }
